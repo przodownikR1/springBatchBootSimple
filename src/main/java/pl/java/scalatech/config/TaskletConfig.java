@@ -10,9 +10,11 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import pl.java.scalatech.tasklet.HelloTasklet;
 @Configuration
+@Profile("java")
 public class TaskletConfig {
     
     @Autowired
