@@ -87,7 +87,7 @@ public class BatchConfiguration {
 
     @Bean
     public Step step1(StepBuilderFactory stepBuilderFactory, ItemReader<Person> reader, ItemWriter<Person> writer, ItemProcessor<Person, Person> processor) {
-        return stepBuilderFactory.get("step1").<Person, Person> chunk(10).reader(reader).processor(processor).writer(writer).build();
+        return stepBuilderFactory.get("step1").<Person, Person> chunk(3).reader(reader).processor(processor).writer(writer).build();
     }
 
     @Bean
