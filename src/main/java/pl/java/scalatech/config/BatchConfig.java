@@ -34,7 +34,7 @@ import com.google.common.hash.Hashing;
 @Configuration
 @EnableBatchProcessing
 @Slf4j
-public class BatchConfiguration {
+public class BatchConfig {
     @Value("${csv.source}")
     private String csv;
 
@@ -81,8 +81,8 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Job importUserJob(JobBuilderFactory jobs, Step s1, JobExecutionListener listener) {
-        return jobs.get("importJob").incrementer(new RunIdIncrementer()).listener(listener).flow(s1).end().build();
+    public Job importUserJob(JobBuilderFactory jobs, Step step1, JobExecutionListener listener) {
+        return jobs.get("importJob").incrementer(new RunIdIncrementer()).listener(listener).flow(step1).end().build();
     }
 
     @Bean
