@@ -17,6 +17,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -34,7 +35,7 @@ import com.google.common.collect.Maps;
 
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes=BatchConfig.class)
+@ContextConfiguration(locations="classpath:tasklet.xml")
 public class HelloTaskletTest {
 
     @Autowired
@@ -49,7 +50,7 @@ public class HelloTaskletTest {
     @Test
     public void shouldInterfacesInstanceExists() {
         Assertions.assertThat(jobRepository).isNotNull();
-        Assertions.assertThat(jobExplorer).isNotNull();
+        Assertions.assertThat(jobRepository).isNotNull();
     }
     
     @Test

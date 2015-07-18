@@ -25,6 +25,8 @@ targetCompatibility = 1.8
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-batch")
     compile("org.springframework.boot:spring-boot-starter-logging")
+    compile 'org.springframework:spring-context:4.1.7.RELEASE'
+    
     compile("org.hsqldb:hsqldb")
     testCompile("junit:junit")
     compile("org.projectlombok:lombok:1.16.4")

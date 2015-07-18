@@ -6,7 +6,6 @@ import org.springframework.context.annotation.ImportResource;
 
 @EnableBatchProcessing
 @Configuration
-@ImportResource("classpath:tasklet.xml")
 public class BatchConfig {
 
 }

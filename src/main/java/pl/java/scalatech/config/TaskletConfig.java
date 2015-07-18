@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Profile;
 
 import pl.java.scalatech.tasklet.HelloTasklet;
 @Configuration
-@Profile("java")
+@Profile(value= {"java","commandLine"})
 public class TaskletConfig {
     
     @Autowired
