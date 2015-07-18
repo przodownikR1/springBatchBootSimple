@@ -8,7 +8,11 @@ http://www.springframework.org/schema/batch http://www.springframework.org/schem
 
 <bean id="helloTasklet" class="pl.java.scalatech.tasklet.HelloTasklet" />
 
-<batch:job id="taskletSimple">
+ <bean id="jobParametersIncrementer" class="org.springframework.batch.core.launch.support.RunIdIncrementer"/> 
+
+ <bean id="jobSimpleInc" class="pl.java.scalatech.parameters.SimpleJobParametersIncrementer"/> 
+
+<batch:job id="taskletSimple" incrementer="jobParametersIncrementer" job-repository="jobRepository">
 
  <batch:step id="stepSimple" allow-start-if-complete="true">
    <batch:tasklet ref="helloTasklet"/> 

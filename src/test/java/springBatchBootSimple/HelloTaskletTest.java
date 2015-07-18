@@ -3,8 +3,11 @@ package springBatchBootSimple;
 import java.util.Date;
 import java.util.Map;
 
+import javax.batch.operations.JobOperator;
+
 import lombok.extern.slf4j.Slf4j;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,9 +17,11 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -36,6 +41,16 @@ public class HelloTaskletTest {
     private Job taskletSimple;
     @Autowired
     private JobLauncher jobLauncher;
+    @Autowired
+    private JobRepository jobRepository;
+    @Autowired
+    private JobExplorer jobExplorer;
+    
+    @Test
+    public void shouldInterfacesInstanceExists() {
+        Assertions.assertThat(jobRepository).isNotNull();
+        Assertions.assertThat(jobExplorer).isNotNull();
+    }
     
     @Test
     public void shouldTaskletWork() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
