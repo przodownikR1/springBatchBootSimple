@@ -21,9 +21,7 @@ public class IndexTasklet  implements Tasklet {
         String id = jobExecutionContext.getString("ID");
         log.info("+++ retrieve id from context {}",id);
                 
-        
-        String login = jobExecutionContext.getString("login");
-        log.info("+++ login {}",login);
+    
         return FINISHED;
     }
 

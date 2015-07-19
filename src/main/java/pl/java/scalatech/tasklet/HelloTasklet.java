@@ -8,14 +8,18 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import pl.java.scalatech.holder.SampleHolder;
 import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 @Slf4j
 public class HelloTasklet implements Tasklet {
     
     //@Value("#{jobParameters['message']}") 
     private String message;
+    @Autowired
+    private SampleHolder sampleHolder;
     
     public RepeatStatus execute(final StepContribution sc, final ChunkContext context) throws Exception {
         
@@ -28,6 +32,7 @@ public class HelloTasklet implements Tasklet {
         log.info("time : {}",jobParams.getDate("time"));
         log.info("test : {}",jobParams.getString("test"));
         log.info("message : {}",message);
+        sampleHolder.setMessage("Hello World.....");
         jobExecutionContext.put("x", "y");
         //promote
         //promote
