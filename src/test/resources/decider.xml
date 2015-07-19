@@ -23,8 +23,10 @@
  <bean id="indexTasklet" class="pl.java.scalatech.tasklet.IndexTasklet"/>
  <bean id="generateReportTasklet" class="pl.java.scalatech.tasklet.ReportTasklet"/>
 
+  <bean id="jobListener" class="pl.java.scalatech.listener.JobLoggerListener"/>
+ <bean id="jobParametersIncrementer" class="org.springframework.batch.core.launch.support.RunIdIncrementer"/> 
  
-  <batch:job id="simpleDeciderTask">
+  <batch:job id="simpleDeciderTask" incrementer="jobParametersIncrementer">
         <batch:step id="startStep" next="decide">
             <tasklet ref="startTasklet"/>
         </batch:step>
@@ -54,6 +56,9 @@
         <batch:step id="cleanStep">
             <tasklet ref="cleanTasklet"/>
         </batch:step>
+        <batch:listeners>
+          <batch:listener ref="jobListener" />
+        </batch:listeners>
         
     </batch:job>
    
