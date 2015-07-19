@@ -26,9 +26,9 @@ import com.google.common.collect.Maps;
 
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations="classpath:decider.xml")
+@ContextConfiguration(locations="classpath:deciderOnListener.xml")
 @ActiveProfiles("test")
-public class DeciderTest {
+public class DeciderOnListenerTest {
     
     @Autowired
     private Job simpleDeciderTask;

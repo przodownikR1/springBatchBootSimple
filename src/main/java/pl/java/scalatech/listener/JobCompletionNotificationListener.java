@@ -26,7 +26,7 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
     @Override
     public void afterJob(JobExecution jobExecution) {
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
-            log.info("+++ job finished!");
+            log.info("$$$ job finished!");
             jdbcTemplate
                     .query("SELECT login, passwd, age FROM person", (RowMapper<Person>) (rs, row) -> new Person(rs.getString(1), rs.getString(2), rs.getInt(3)))
                     .stream().forEach(p -> log.info("Found {} in the ds", p));

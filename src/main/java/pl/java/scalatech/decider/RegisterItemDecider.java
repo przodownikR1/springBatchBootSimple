@@ -5,6 +5,7 @@ import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.job.flow.FlowExecutionStatus;
 import org.springframework.batch.core.job.flow.JobExecutionDecider;
@@ -12,15 +13,19 @@ import org.springframework.batch.item.ExecutionContext;
 
 @Slf4j
 public class RegisterItemDecider implements JobExecutionDecider {
-    private Random r = new Random();
+    
 
     @Override
     public FlowExecutionStatus decide(JobExecution jobExecution, StepExecution stepExecution) {
         log.info("+++  jobExecutionContext {} ", jobExecution.getExecutionContext());
         ExecutionContext jobExecutionContext = stepExecution.getJobExecution().getExecutionContext();
-        if (r.nextBoolean()) {
+        log.info("___ {}",jobExecutionContext);
+        JobParameters params = jobExecution.getJobParameters();
+        if("true".equals(params.getString("skipRegister"))) {
+            log.info("DDD selected options -> COMPLETED WITH SKIPS"); 
             return new FlowExecutionStatus("COMPLETED WITH SKIPS");
         }
+        log.info("DDD selected options -> COMPLETED");
         return FlowExecutionStatus.COMPLETED;
     }
 

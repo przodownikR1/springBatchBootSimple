@@ -25,6 +25,7 @@
 
  <bean id="jobListener" class="pl.java.scalatech.listener.JobLoggerListener"/>
  <bean id="stepListener" class="pl.java.scalatech.listener.StepLoggingListener"/>
+ <bean id="deciderListener" class="pl.java.scalatech.listener.SkippedItemsStepListener"/>
  <bean id="jobParametersIncrementer" class="org.springframework.batch.core.launch.support.RunIdIncrementer"/> 
  
   <batch:job id="simpleDeciderTask" incrementer="jobParametersIncrementer">
@@ -37,17 +38,16 @@
             <batch:next on="SKIPPED" to="registerSkipRecord"/>
         </batch:decision>
         
-        <batch:step id="registerSkipRecord" next="registerSkipDecision">
-            <tasklet ref="registerTasklet"/>
+        <batch:step id="registerSkipRecord">
+            <tasklet ref="registerTasklet">
              <batch:listeners>
-              <batch:listener ref="stepListener"/>
+              <batch:listener ref="deciderListener"/>
             </batch:listeners>
-        </batch:step>
-        
-        <batch:decision id="registerSkipDecision" decider="registerItemsDecider">
+            </tasklet>
             <batch:next on="COMPLETED WITH SKIPS" to="generateReportStep"/>
             <batch:next on="*" to="indexStep"/>
-        </batch:decision>
+        </batch:step>
+        
         
         <batch:step id="generateReportStep" next="indexStep">
             <tasklet ref="generateReportTasklet"/>
