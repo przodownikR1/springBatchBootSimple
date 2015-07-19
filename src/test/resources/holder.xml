@@ -20,7 +20,9 @@
  
  <bean id ="startTasklet" class="pl.java.scalatech.tasklet.HelloTasklet"/>
   <bean id ="registerTasklet" class="pl.java.scalatech.tasklet.RegisterTasklet"/>
- <bean id="cleanTasklet" class="pl.java.scalatech.tasklet.CleanTasklet"/>
+ <bean id="cleanTasklet" class="pl.java.scalatech.tasklet.CleanTasklet" scope="step">
+    <property name="message" value="#{sampleHolder.getMessage()}" />
+ </bean>
  <bean id="indexTasklet" class="pl.java.scalatech.tasklet.IndexTasklet"/>
  <bean id="generateReportTasklet" class="pl.java.scalatech.tasklet.ReportTasklet"/>
 

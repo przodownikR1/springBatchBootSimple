@@ -1,6 +1,7 @@
 package pl.java.scalatech.tasklet;
 
 import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.batch.core.JobParameters;
@@ -14,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import pl.java.scalatech.holder.SampleHolder;
 @Slf4j
 public class CleanTasklet  implements Tasklet {
-    @Autowired
-    private SampleHolder sampleHolder;
+    @Setter
+    private String message;
     public RepeatStatus execute(final StepContribution sc, final ChunkContext context) throws Exception {  
         log.info("+++ Clean task ..... execute !!! ");
         log.info("+++ StepContribution :  {} ",sc);
@@ -26,7 +27,7 @@ public class CleanTasklet  implements Tasklet {
         log.info("test : {}",jobParams.getString("test"));
         ExecutionContext jobExecutionContext = context.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
          
-        log.info("^^^  {}",sampleHolder.getMessage());
+        log.info("^^^  {}",message);
         
         return FINISHED;
     }
