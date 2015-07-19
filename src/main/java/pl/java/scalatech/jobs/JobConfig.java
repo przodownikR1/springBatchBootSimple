@@ -1,4 +1,6 @@
-package pl.java.scalatech.config;
+package pl.java.scalatech.jobs;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
 
@@ -37,6 +39,8 @@ import com.google.common.hash.Hashing;
 public class JobConfig {
     @Value("${csv.source}")
     private String csv;
+    
+    private AtomicInteger ai = new AtomicInteger();
 
     @Bean
     public ItemReader<Person> reader() {
@@ -63,9 +67,10 @@ public class JobConfig {
     public ItemProcessor<Person, Person> processor() {
         return item ->
         {
-            final String firstName = item.getLogin().toUpperCase();
-            String passwd = Hashing.md5().hashString("passwd_" + firstName, Charsets.UTF_8).toString();
-            final Person transformed = new Person(firstName, passwd, item.getAge());
+            final String login = item.getLogin().toUpperCase();
+            String passwd = Hashing.md5().hashString("passwd_" + login, Charsets.UTF_8).toString();
+            final Person transformed = Person.builder().login(login).passwd(passwd).age(item.getAge()).build();
+            transformed.setId(ai.getAndIncrement());
             log.info("transform (" + item + ") -> (" + transformed + ")");
             return transformed;
         };

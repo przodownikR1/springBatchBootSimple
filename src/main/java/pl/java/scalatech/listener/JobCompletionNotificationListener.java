@@ -28,7 +28,8 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
             log.info("+++ job finished!");
             jdbcTemplate
-                    .query("SELECT login, passwd, age FROM person", (RowMapper<Person>) (rs, row) -> new Person(rs.getString(1), rs.getString(2), rs.getInt(3)))
+                    .query("SELECT login, passwd, age FROM person", (RowMapper<Person>) (rs, row) ->
+                    Person.builder().login(rs.getString(1)).passwd(rs.getString(2)).age(rs.getInt(3)).build())
                     .stream().forEach(p -> log.info("Found {} in the ds", p));
 
         }
