@@ -20,7 +20,10 @@ public class IndexTasklet  implements Tasklet {
         ExecutionContext jobExecutionContext = context.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
         String id = jobExecutionContext.getString("ID");
         log.info("+++ retrieve id from context {}",id);
-
+                
+        
+        String login = jobExecutionContext.getString("login");
+        log.info("+++ login {}",login);
         return FINISHED;
     }
 

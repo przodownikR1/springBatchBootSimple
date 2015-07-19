@@ -26,6 +26,8 @@ public class RegisterTasklet implements Tasklet {
         log.info("+++ put Id {} to context ",id);
         jobExecutionContext.put("ID", id);
        
+        
+        
         return FINISHED;
     }
 }

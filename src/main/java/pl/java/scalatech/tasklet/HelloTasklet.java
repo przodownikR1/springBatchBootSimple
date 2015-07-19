@@ -29,6 +29,12 @@ public class HelloTasklet implements Tasklet {
         log.info("test : {}",jobParams.getString("test"));
         log.info("message : {}",message);
         jobExecutionContext.put("x", "y");
+        //promote
+        //promote
+       ExecutionContext stepExecutionContext = context.getStepContext().getStepExecution().getExecutionContext();
+       stepExecutionContext.put("login", "przodownikR1");        
+
+        
         return FINISHED;
     }
 }
