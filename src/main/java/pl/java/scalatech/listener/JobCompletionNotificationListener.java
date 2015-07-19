@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import pl.java.scalatech.domain.Person;
 
 @Slf4j
-@Component
+@Component("notification")
 public class JobCompletionNotificationListener extends JobExecutionListenerSupport {
 
     private final JdbcTemplate jdbcTemplate;

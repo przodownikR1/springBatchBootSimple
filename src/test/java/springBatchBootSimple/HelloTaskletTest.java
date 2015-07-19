@@ -3,8 +3,6 @@ package springBatchBootSimple;
 import java.util.Date;
 import java.util.Map;
 
-import javax.batch.operations.JobOperator;
-
 import lombok.extern.slf4j.Slf4j;
 
 import org.assertj.core.api.Assertions;
@@ -24,6 +22,7 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -35,6 +34,7 @@ import com.google.common.collect.Maps;
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=BatchConfig.class)
+@ActiveProfiles("xml")
 public class HelloTaskletTest {
 
     @Autowired
