@@ -31,7 +31,7 @@ public class HelloTasklet implements Tasklet {
         jobExecutionContext.put("x", "y");
         //promote
         //promote
-       ExecutionContext stepExecutionContext = context.getStepContext().getStepExecution().getExecutionContext();
+       ExecutionContext stepExecutionContext = context.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
        stepExecutionContext.put("login", "przodownikR1");        
 
         

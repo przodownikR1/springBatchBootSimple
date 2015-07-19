@@ -1,6 +1,7 @@
 package pl.java.scalatech.tasklet;
 
 import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.batch.core.JobParameters;
@@ -14,16 +15,17 @@ import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 @Slf4j
 public class IndexTasklet  implements Tasklet {
-   
+    @Setter
+    private String login;
+    
     public RepeatStatus execute(final StepContribution sc, final ChunkContext context) throws Exception {  
         log.info("+++ Index tasklet ..... execute !!! ");
         ExecutionContext jobExecutionContext = context.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
         String id = jobExecutionContext.getString("ID");
         log.info("+++ retrieve id from context {}",id);
                 
-        
-        String login = jobExecutionContext.getString("login");
-        log.info("+++ login {}",login);
+ 
+        log.info("!!!  retrive login from SpEl + lazy binding {}",login);
         return FINISHED;
     }
 

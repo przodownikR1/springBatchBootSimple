@@ -13,8 +13,6 @@
  
  <import resource="classpath:batchConfig.xml"/>
  
- 
- 
  <bean id="myDecider" class="pl.java.scalatech.decider.SkippedDecider"/>
  <bean id="registerItemsDecider" class="pl.java.scalatech.decider.RegisterItemDecider"/>
  
@@ -22,7 +20,10 @@
  <bean id ="startTasklet" class="pl.java.scalatech.tasklet.HelloTasklet"/>
   <bean id ="registerTasklet" class="pl.java.scalatech.tasklet.RegisterTasklet"/>
  <bean id="cleanTasklet" class="pl.java.scalatech.tasklet.CleanTasklet"/>
- <bean id="indexTasklet" class="pl.java.scalatech.tasklet.IndexTasklet"/>
+ <bean id="indexTasklet" class="pl.java.scalatech.tasklet.IndexTasklet" scope="step">
+   <property name="login" value="#{jobExecutionContext['login']}"/>
+ </bean>
+  
  <bean id="generateReportTasklet" class="pl.java.scalatech.tasklet.ReportTasklet"/>
 
  <bean id="jobListener" class="pl.java.scalatech.listener.JobLoggerListener"/>
