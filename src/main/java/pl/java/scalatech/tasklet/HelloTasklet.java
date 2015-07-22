@@ -10,6 +10,8 @@ import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.google.common.collect.Multiset.Entry;
+
 import static org.springframework.batch.repeat.RepeatStatus.FINISHED;
 @Slf4j
 public class HelloTasklet implements Tasklet {
@@ -20,11 +22,15 @@ public class HelloTasklet implements Tasklet {
     public RepeatStatus execute(final StepContribution sc, final ChunkContext context) throws Exception {
         
         log.info("First simple task ..... execute !!! ");
-        log.info("+++ StepContribution :  {} ",sc);
-        log.info("+++  ChunkContext  :  {}  -> jobName  : {} ",context,context.getStepContext().getJobName());
-        log.info("+++  StepContext :  jobParameters :  {} , stepExecution : {} , stepName :  {} ",context.getStepContext().getJobParameters(),context.getStepContext().getStepExecution(),context.getStepContext().getStepName());
+     
         ExecutionContext jobExecutionContext = context.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
         JobParameters jobParams = context.getStepContext().getStepExecution().getJobExecution().getJobParameters();
+        if (jobParams.isEmpty()) {
+            log.info("+++ No job parameters!");
+        } else {
+            log.info("Job parameters:");
+            jobParams.getParameters().entrySet().stream().forEach(t -> log.info("param.key : {}, param.value : {} , param.value.type {}",t.getKey(),t.getValue().getValue(),t.getValue().getType()));
+        }
         log.info("time : {}",jobParams.getDate("time"));
         log.info("test : {}",jobParams.getString("test"));
         log.info("message : {}",message);
