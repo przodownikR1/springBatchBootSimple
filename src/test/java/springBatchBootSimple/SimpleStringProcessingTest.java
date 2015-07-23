@@ -3,8 +3,6 @@ package springBatchBootSimple;
 import java.util.Date;
 import java.util.Map;
 
-import javax.batch.operations.JobOperator;
-
 import lombok.extern.slf4j.Slf4j;
 
 import org.assertj.core.api.Assertions;
@@ -29,18 +27,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import pl.java.scalatech.config.BatchConfig;
+import pl.java.scalatech.job.SimpleStringProcessingJob;
 
 import com.google.common.collect.Maps;
 
-
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes=BatchConfig.class)
-@ActiveProfiles("java")
-public class HelloTaskletTest {
+@ContextConfiguration(classes= {BatchConfig.class,SimpleStringProcessingJob.class})
+@ActiveProfiles("simpleString")
+public class SimpleStringProcessingTest {
 
     @Autowired
-    private Job taskletSimple;
+    private Job simpleStringProcessorTask;
     @Autowired
     private JobLauncher jobLauncher;
     @Autowired
@@ -59,7 +57,7 @@ public class HelloTaskletTest {
         Map<String,JobParameter> params = Maps.newHashMap();
         params.put("test", new JobParameter("przodownik"));
         params.put("time", new JobParameter(new Date()));
-        JobExecution execution = jobLauncher.run(taskletSimple, new JobParameters(params));
+        JobExecution execution = jobLauncher.run(simpleStringProcessorTask, new JobParameters(params));
         log.info("Exit Status :  {}", execution.getExitStatus());
         Assert.assertEquals(ExitStatus.COMPLETED, execution.getExitStatus());
            

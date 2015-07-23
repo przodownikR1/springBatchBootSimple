@@ -4,7 +4,8 @@
     xmlns:task="http://www.springframework.org/schema/task"
     xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd">
+http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd"
+ profile="java">
 
 <bean id="helloTasklet" class="pl.java.scalatech.tasklet.HelloTasklet" />
 
