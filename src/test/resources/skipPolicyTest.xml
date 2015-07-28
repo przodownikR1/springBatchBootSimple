@@ -28,7 +28,7 @@
       <property name="invalidValues" ref="processorList"/>
     </bean>
     <bean id="skipListener" class="pl.java.scalatech.skip.SkipSampleListener"/>
-   <batch:job id="skipFirstJob">
+   <batch:job id="skipPolicyJob">
      <batch:step id="first">
        <batch:tasklet>
          <batch:chunk  commit-interval="10" reader="reader" processor="processor" writer="writer" skip-limit="2" >
