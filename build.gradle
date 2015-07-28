@@ -25,7 +25,10 @@ targetCompatibility = 1.8
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-batch")
     compile("org.springframework.boot:spring-boot-starter-logging")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.hsqldb:hsqldb")
+    runtime("com.h2database:h2")
+    runtime("mysql:mysql-connector-java")
     testCompile("junit:junit")
     compile("org.projectlombok:lombok:1.16.4")
     compile("com.google.guava:guava:18.0")
