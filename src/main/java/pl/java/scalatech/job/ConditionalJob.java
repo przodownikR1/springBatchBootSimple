@@ -36,7 +36,7 @@ public class ConditionalJob {
                 .get("job")
                 .start(stepFirst()).on("FAILED").to(stepSecond())
                 .from(stepSecond()).on("COMPLETED").to(stepThird())
-                .from(stepThird()).on("COMPLETED").to(stepThird())
+                .from(stepFirst()).on("COMPLETED").to(stepThird())
                 .end()
                 .build();
     }
@@ -69,7 +69,7 @@ public class ConditionalJob {
                 .get("step3")
                 .tasklet((stepContribution, chunkContext) -> {
                     log.info("+++ 3 step executed ");
-                    return null;
+                    return RepeatStatus.FINISHED;
                 })
                 .build();
     }

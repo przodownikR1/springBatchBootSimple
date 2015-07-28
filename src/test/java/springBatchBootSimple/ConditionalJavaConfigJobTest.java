@@ -16,6 +16,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -48,6 +49,7 @@ public class ConditionalJavaConfigJobTest {
     @Autowired
     private JobExplorer jobExplorer;
     
+    
     @Test
     public void shouldInterfacesInstanceExists() {
         Assertions.assertThat(jobRepository).isNotNull();
@@ -61,7 +63,12 @@ public class ConditionalJavaConfigJobTest {
         params.put("time", new JobParameter(new Date()));
         JobExecution execution = jobLauncher.run(cjob, new JobParameters(params));
         log.info("Exit Status :  {}", execution.getExitStatus());
+        for (StepExecution step : execution.getStepExecutions()) {
+            log.info("step {}, {}",step.getStepName(),step.getExitStatus());
+            
+        }
         Assert.assertEquals(ExitStatus.COMPLETED, execution.getExitStatus());
+      
            
     }
     
