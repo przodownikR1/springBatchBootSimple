@@ -1,4 +1,4 @@
-package springBatchBootSimple.validator;
+package springBatchBootSimple.retry;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -9,9 +9,7 @@ import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
@@ -28,45 +26,37 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import pl.java.scalatech.retry.RetryProcessor;
+
 import com.google.common.collect.Maps;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:validateLaunchParams.xml" })
+@ContextConfiguration(locations = { "classpath:retryTest.xml" })
 @ActiveProfiles(value = { "dev" })
 @Slf4j
-public class ValidatorJobTest {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
+public class RetrySampleTest {
     @Autowired
     private JobLauncher jobLauncher;
     @Autowired
-    private Job validJob;
+    private Job retryFirstJob;
     @Autowired
     private DataSource dataSource;
 
-    @Test
-    public void shouldInValidJobValidatorWork() throws SQLException, JobExecutionAlreadyRunningException, JobRestartException,
-            JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-        thrown.expect(JobParametersInvalidException.class);
-        log.info(" +++   db driver :  {}", dataSource.getConnection().getMetaData().getDriverName());
-
-        Map<String, JobParameter> params = Maps.newHashMap();
-        params.put("date1", new JobParameter(new Date()));
-        JobExecution execution = jobLauncher.run(validJob, new JobParameters(params));
-        log.info("Exit Status :  {}", execution.getExitStatus());
-        Assert.assertEquals(ExitStatus.COMPLETED, execution.getExitStatus());
-    }
+    @Autowired
+    private RetryProcessor retryProcessor;
 
     @Test
-    public void shouldValidJobWork() throws  JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException,
+    public void shouldReadWrite() throws SQLException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException,
             JobParametersInvalidException {
+
         Map<String, JobParameter> params = Maps.newHashMap();
-        params.put("date", new JobParameter(new Date()));
-        JobExecution execution = jobLauncher.run(validJob, new JobParameters(params));
+        params.put("time", new JobParameter(new Date()));
+        //params.put("number", new JobParameter("12"));
+        JobExecution execution = jobLauncher.run(retryFirstJob, new JobParameters(params));
         log.info("Exit Status :  {}", execution.getExitStatus());
+
         Assert.assertEquals(ExitStatus.COMPLETED, execution.getExitStatus());
+        log.info("+++   {}", retryProcessor.getAi().get());
 
     }
 }

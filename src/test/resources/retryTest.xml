@@ -17,27 +17,26 @@
     <bean id="writer" class="pl.java.scalatech.skip.SkipWriter" p:invalidValue="40"/>  
     <bean id="reader" class="pl.java.scalatech.skip.SkipReader" p:invalidValue="40"/>
     <util:list id="processorList">
-      <value>23</value>
       <value>24</value>
     </util:list>
-    <bean id="processor" class="pl.java.scalatech.skip.SkipProcessor" p:invalidValues-ref="processorList"  p:latency="1000"/>
+    <bean id="processor" class="pl.java.scalatech.retry.RetryProcessor" p:invalidValues-ref="processorList" p:thresholdRetry="50"/>
     <bean id="skipListener" class="pl.java.scalatech.skip.SkipSampleListener"/>
-    
-    <bean id="timeoutCompletionPolicy" class="org.springframework.batch.repeat.policy.TimeoutTerminationPolicy">
-        <constructor-arg value="1"/>
-    </bean>
-    
-    
-   <batch:job id="skipPolicyJob">
-     <batch:step id="policyFirstStep">
+    <bean id="retryListener" class="pl.java.scalatech.retry.SimpleRepeatListener"/>
+   <batch:job id="retryFirstJob" restartable="false">
+     <batch:step id="retryFirstStep">
        <batch:tasklet>
-         <batch:chunk   reader="reader" processor="processor" writer="writer" skip-limit="2" cache-capacity="5" chunk-completion-policy="timeoutCompletionPolicy" >
+         <batch:chunk  commit-interval="10" reader="reader" processor="processor" writer="writer" retry-limit="2" skip-limit="2" >
          
           <batch:skippable-exception-classes>
             <batch:include class="pl.java.scalatech.skip.MySkipException"/>
           </batch:skippable-exception-classes>
-          
+          <batch:retryable-exception-classes>
+           <batch:include class="pl.java.scalatech.retry.UnexpectedSituation"/>
+          </batch:retryable-exception-classes>
          </batch:chunk>   
+         <batch:listeners>
+            <batch:listener ref="retryListener"/>
+         </batch:listeners>
          
        </batch:tasklet>
        <batch:listeners>
