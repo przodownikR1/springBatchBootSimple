@@ -33,8 +33,8 @@ import com.google.common.collect.Maps;
 
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes= {BatchConfig.class,SimpleStringProcessingJob.class})
-@ActiveProfiles("simpleString")
+@ContextConfiguration(classes = { BatchConfig.class, SimpleStringProcessingJob.class })
+@ActiveProfiles(profiles = { "simpleString", "java", "dev" })
 public class SimpleStringProcessingTest {
 
     @Autowired
@@ -45,25 +45,23 @@ public class SimpleStringProcessingTest {
     private JobRepository jobRepository;
     @Autowired
     private JobExplorer jobExplorer;
-    
+
     @Test
     public void shouldInterfacesInstanceExists() {
         Assertions.assertThat(jobRepository).isNotNull();
         Assertions.assertThat(jobExplorer).isNotNull();
     }
-    
+
     @Test
-    public void shouldTaskletWork() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-        Map<String,JobParameter> params = Maps.newHashMap();
+    public void shouldTaskletWork() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException,
+            JobParametersInvalidException {
+        Map<String, JobParameter> params = Maps.newHashMap();
         params.put("test", new JobParameter("przodownik"));
         params.put("time", new JobParameter(new Date()));
         JobExecution execution = jobLauncher.run(simpleStringProcessorTask, new JobParameters(params));
         log.info("Exit Status :  {}", execution.getExitStatus());
         Assert.assertEquals(ExitStatus.COMPLETED, execution.getExitStatus());
-           
-    }
-    
-    
 
+    }
 
 }

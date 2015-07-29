@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.ExitStatus;
@@ -33,11 +32,10 @@ import pl.java.scalatech.job.ConditionalJob;
 
 import com.google.common.collect.Maps;
 
-
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes= {BatchConfig.class,ConditionalJob.class})
-@ActiveProfiles("conditional")
+@ContextConfiguration(classes = { BatchConfig.class, ConditionalJob.class })
+@ActiveProfiles(profiles = { "conditional", "java" })
 public class ConditionalJavaConfigJobTest {
 
     @Autowired
@@ -48,29 +46,26 @@ public class ConditionalJavaConfigJobTest {
     private JobRepository jobRepository;
     @Autowired
     private JobExplorer jobExplorer;
-    
-    
+
     @Test
     public void shouldInterfacesInstanceExists() {
         Assertions.assertThat(jobRepository).isNotNull();
         Assertions.assertThat(jobExplorer).isNotNull();
     }
-    
+
     @Test
-   
-    public void shouldTaskletWork() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-        Map<String,JobParameter> params = Maps.newHashMap();
+    public void shouldTaskletWork() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException,
+            JobParametersInvalidException {
+        Map<String, JobParameter> params = Maps.newHashMap();
         params.put("time", new JobParameter(new Date()));
         JobExecution execution = jobLauncher.run(cjob, new JobParameters(params));
         log.info("Exit Status :  {}", execution.getExitStatus());
         for (StepExecution step : execution.getStepExecutions()) {
-            log.info("step {}, {}",step.getStepName(),step.getExitStatus());
-            
+            log.info("step {}, {}", step.getStepName(), step.getExitStatus());
+
         }
         Assert.assertEquals(ExitStatus.COMPLETED, execution.getExitStatus());
-      
-           
+
     }
-    
-    
+
 }

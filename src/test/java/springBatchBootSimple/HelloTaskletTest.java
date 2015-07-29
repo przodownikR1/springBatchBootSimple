@@ -3,8 +3,6 @@ package springBatchBootSimple;
 import java.util.Date;
 import java.util.Map;
 
-import javax.batch.operations.JobOperator;
-
 import lombok.extern.slf4j.Slf4j;
 
 import org.assertj.core.api.Assertions;
@@ -32,11 +30,10 @@ import pl.java.scalatech.config.BatchConfig;
 
 import com.google.common.collect.Maps;
 
-
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes=BatchConfig.class)
-@ActiveProfiles("java")
+@ContextConfiguration(classes = BatchConfig.class)
+@ActiveProfiles(profiles = { "conditional", "java" })
 public class HelloTaskletTest {
 
     @Autowired
@@ -47,25 +44,23 @@ public class HelloTaskletTest {
     private JobRepository jobRepository;
     @Autowired
     private JobExplorer jobExplorer;
-    
+
     @Test
     public void shouldInterfacesInstanceExists() {
         Assertions.assertThat(jobRepository).isNotNull();
         Assertions.assertThat(jobExplorer).isNotNull();
     }
-    
+
     @Test
-    public void shouldTaskletWork() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
-        Map<String,JobParameter> params = Maps.newHashMap();
+    public void shouldTaskletWork() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException,
+            JobParametersInvalidException {
+        Map<String, JobParameter> params = Maps.newHashMap();
         params.put("test", new JobParameter("przodownik"));
         params.put("time", new JobParameter(new Date()));
         JobExecution execution = jobLauncher.run(taskletSimple, new JobParameters(params));
         log.info("Exit Status :  {}", execution.getExitStatus());
         Assert.assertEquals(ExitStatus.COMPLETED, execution.getExitStatus());
-           
-    }
-    
-    
 
+    }
 
 }

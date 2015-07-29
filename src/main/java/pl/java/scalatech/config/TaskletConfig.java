@@ -13,21 +13,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import pl.java.scalatech.tasklet.HelloTasklet;
+
 @Configuration
 @Profile("java")
 public class TaskletConfig {
-    
+
     @Autowired
     private JobBuilderFactory jobs;
     @Autowired
     private JobLauncher jobLauncher;
-    
 
     @Autowired
     private StepBuilderFactory stepBuilders;
-    
+
     @Bean
-    public Job job(JobExecutionListener listener,Step stepTasklet) {
+    public Job job(JobExecutionListener listener, Step stepTasklet) {
         return jobs.get("HelloJob").listener(listener).start(stepTasklet()).build();
     }
 
@@ -35,8 +35,6 @@ public class TaskletConfig {
     public Step stepTasklet() {
         return stepBuilders.get("stepTasklet").tasklet(helloTasklet()).build();
     }
-    
-    
 
     @Bean
     public Tasklet helloTasklet() {

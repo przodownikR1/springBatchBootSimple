@@ -7,18 +7,19 @@ buildscript {
         maven {
             mavenCentral()
             url 'http://repo.springsource.org/libs-milestone/'
+             url 'http://repo.springsource.org/snapshot/'
         }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
     }
 }
-
-ext {
-    springBatchAdminVersion = '2.0.0.BUILD-SNAPSHOT'
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://repo.spring.io/libs-snapshot-local/'
+    }
 }
-
-
 apply plugin: 'java'
 apply plugin: 'spring-boot'
 
@@ -27,18 +28,8 @@ jar {
     version =  '0.0.1'
 }
 
-repositories {
-     maven {
-            mavenCentral()
-            url 'http://repo.springsource.org/libs-milestone/'
-        }
-}
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-ext {
-    springBatchAdminVersion = '2.0.0.BUILD-SNAPSHOT'
-}
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-batch")
