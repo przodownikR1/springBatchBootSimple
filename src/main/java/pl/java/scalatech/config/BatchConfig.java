@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
 @EnableBatchProcessing
 @Configuration
 @ImportResource("classpath:tasklet.xml")
-@Profile("java")
+@Profile(value = { "java", "simpleString" })
 public class BatchConfig {
 
 }

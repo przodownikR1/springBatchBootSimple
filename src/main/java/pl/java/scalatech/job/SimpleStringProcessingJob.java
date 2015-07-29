@@ -22,21 +22,21 @@ import pl.java.scalatech.writer.SimpleStringWriter;
 
 @Configuration
 @Profile("simpleString")
-@ComponentScan(basePackages="pl.java.scalatech.listener")
+@ComponentScan(basePackages = "pl.java.scalatech.listener")
 public class SimpleStringProcessingJob {
     @Autowired
     private JobBuilderFactory jobs;
     @Autowired
     private JobLauncher jobLauncher;
-    
+
     @Autowired
     private JobExecutionListener simpleJobLogger;
-    
+
     @Autowired
     private StepBuilderFactory stepBuilders;
-    
+
     @Bean
-    public Job job(JobExecutionListener listener,Step stepProcess) {
+    public Job job(JobExecutionListener listener, Step stepProcess) {
         return jobs.get("simpleStringProcessorTask").incrementer(new RunIdIncrementer()).flow(stepProcess).end().listener(simpleJobLogger).build();
     }
 
@@ -49,15 +49,15 @@ public class SimpleStringProcessingJob {
     public ItemReader<String> reader() {
         return new SimpleStringReader();
     }
-    
-    @Bean 
-    public ItemWriter<String> writer(){
+
+    @Bean
+    public ItemWriter<String> writer() {
         return new SimpleStringWriter();
     }
-    
-    @Bean 
-    public ItemProcessor<String, String> processor(){
+
+    @Bean
+    public ItemProcessor<String, String> processor() {
         return new SimpleStringProcessor();
     }
-    
+
 }

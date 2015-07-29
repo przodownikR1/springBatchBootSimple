@@ -15,7 +15,7 @@ import pl.java.scalatech.domain.Person;
 
 @Slf4j
 @Component
-@Profile("java")
+@Profile("javax")
 public class JobCompletionNotificationListener extends JobExecutionListenerSupport {
 
     private final JdbcTemplate jdbcTemplate;
