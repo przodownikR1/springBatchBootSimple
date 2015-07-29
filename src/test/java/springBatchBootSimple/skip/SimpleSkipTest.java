@@ -42,7 +42,7 @@ public class SimpleSkipTest {
         try {
             Map<String, JobParameter> params = Maps.newHashMap();
             params.put("time", new JobParameter(new Date()));
-            params.put("skip-limit",new JobParameter("2"));
+            //params.put("number", new JobParameter("12"));
             JobExecution execution = jobLauncher.run(skipFirstJob, new JobParameters(params));
             log.info("Exit Status :  {}", execution.getExitStatus());
 
