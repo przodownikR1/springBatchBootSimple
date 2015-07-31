@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<books>
+	<book>
+		<author>1</author>
+		<title>quo vadis</title>
+	</book>
+	<book>
+		<author>1</author>
+		<title>potop</title>
+	</book>
+	<book>
+		<author>1</author>
+		<title>krzyzacy</title>
+	</book>
+</books>

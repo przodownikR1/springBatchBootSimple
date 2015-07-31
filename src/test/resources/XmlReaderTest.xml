@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+	<import resource="classpath:batchConfig.xml" />
+	 <bean id="writer" class="pl.java.scalatech.xml.BookWriter"/>
+	 <batch:job id="xmlReaderJob">
+     <batch:step id="xmlReadStep">
+       <batch:tasklet>
+         <batch:chunk   reader="xmlItemReader" writer="xmlItemWriter" commit-interval="1" />
+       </batch:tasklet>
+     </batch:step>
+   </batch:job>
+   
+	
+	<bean id="xmlItemReader" class="org.springframework.batch.item.xml.StaxEventItemReader">
+		<property name="fragmentRootElementName" value="book" />
+		<property name="resource" value="classpath:book.xml" />
+		<property name="unmarshaller" ref="bookUnmarshaller" />
+	</bean>
+
+	<bean id="bookUnmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="classesToBeBound">
+			<list>
+				<value>pl.java.scalatech.xml.Book</value>
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id = "xmlItemWriter"   class = "org.springframework.batch.item.xml.StaxEventItemWriter">
+            <property name="resource" value = "file:report-book.xml"/>
+            <property name="marshaller" ref = "bookMarshaller"/>
+            <property name="rootTagName" value = "books"/> 
+        </bean>
+        
+        <bean id = "bookMarshaller" class = "org.springframework.oxm.jaxb.Jaxb2Marshaller">
+            <property name="classesToBeBound">
+                <list>
+                    <value>pl.java.scalatech.xml.Book</value>
+                </list>
+            </property> 
+        </bean>
+
+</beans>
