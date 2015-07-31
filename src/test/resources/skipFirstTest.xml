@@ -26,20 +26,15 @@
    <batch:job id="skipFirstJob" restartable="false">
      <batch:step id="skipFirstStep">
        <batch:tasklet>
-         <batch:chunk  commit-interval="10" reader="reader" processor="processor" writer="writer" skip-limit="2" >
-         
+         <batch:chunk  commit-interval="10" reader="reader" processor="processor" writer="writer" skip-limit="2" >     
           <batch:skippable-exception-classes>
             <batch:include class="pl.java.scalatech.skip.MySkipException"/>
-          </batch:skippable-exception-classes>
-          
-         </batch:chunk>   
-         
+          </batch:skippable-exception-classes> 
+         </batch:chunk>    
        </batch:tasklet>
        <batch:listeners>
           <batch:listener ref="skipListener"/>
-          
        </batch:listeners>
      </batch:step>
    </batch:job>
-   
-  </beans>
+</beans>
