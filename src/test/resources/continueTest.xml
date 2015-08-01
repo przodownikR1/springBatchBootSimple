@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:batch="http://www.springframework.org/schema/batch"
+     xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xsi:schemaLocation=
+        "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+    <import resource="classpath:batchConfig.xml"/>
+    <bean id="writer" class="pl.java.scalatech.skip.SkipWriter"  >
+      <property name="invalidValue" value="40"/>
+    </bean>
+    <bean id="reader" class="pl.java.scalatech.skip.SkipReader">
+       <property name="invalidValue" value="40"/>
+    </bean>
+    
+    <util:list id="processorList">
+      <value>16</value>
+    </util:list>
+    <bean id="processor" class="pl.java.scalatech.skip.SkipProcessor">
+      <property name="invalidValues" ref="processorList"/>
+    </bean>
+  
+    
+    <bean id="stepContinueListener" class="pl.java.scalatech.continue_.StepContinueListener"/>
+    <bean id="stepContinueParentListener" class="pl.java.scalatech.continue_.StepContinueParentListener"/>
+    <bean id="chunkListener" class="pl.java.scalatech.continue_.ChunkContinueListener"/>
+    
+    <batch:step id="abstractStep" abstract="true" >
+      <batch:tasklet>
+        <batch:chunk commit-interval="10"/>
+      </batch:tasklet>
+       <batch:listeners>
+              <batch:listener ref="stepContinueParentListener"/>
+       </batch:listeners>
+    </batch:step>
+    
+   <batch:job id="continueJob" restartable="false">
+     <batch:step id="continueStep" parent="abstractStep">
+       <batch:tasklet>
+         <batch:chunk  reader="reader" processor="processor" writer="writer" />
+         <batch:listeners merge="false">
+           <batch:listener ref="chunkListener"/>
+            <batch:listener ref="stepContinueListener"/>
+         </batch:listeners>
+       </batch:tasklet>
+      
+     </batch:step>
+   </batch:job>
+   
+  </beans>
