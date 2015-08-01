@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:task="http://www.springframework.org/schema/task"
+	 xmlns:context="http://www.springframework.org/schema/context"
+	 xmlns:p="http://www.springframework.org/schema/p"
+	 xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+	   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+http://www.springframework.org/schema/jdbc  http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+    <context:property-placeholder location="classpath:batch.properties"/>   
+
+    <bean class="pl.java.scalatech.config.BatchConfig"/>
+    
+	<bean id="helloTasklet" class="pl.java.scalatech.tasklet.HelloTasklet" />
+
+	<bean id="jobParametersIncrementer" class="org.springframework.batch.core.launch.support.RunIdIncrementer" />
+      
+	<bean id="jobSimpleInc" class="pl.java.scalatech.parameters.SimpleJobParametersIncrementer" />
+ 
+    <bean id="jobLauncher"  class="org.springframework.batch.core.launch.support.SimpleJobLauncher" p:jobRepository-ref="jobRepository"/>
+        
+   <jdbc:embedded-database id="dataSource" type="HSQL">
+         <jdbc:script location="${batch.drop.script}" />
+          <jdbc:script location="${batch.schema.script}" />
+   </jdbc:embedded-database>
+   
+   <!--  <bean id="transactionManager"  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+      <property name="dataSource" ref="dataSource"/>
+   </bean> -->
+   
+   <bean id="transactionManager" class="org.springframework.batch.support.transaction.ResourcelessTransactionManager" />
+
+   <batch:job-repository id="jobRepository" data-source="dataSource" transaction-manager="transactionManager" table-prefix="BATCH_" />
+
+	<batch:job id="taskletSimple" incrementer="jobSimpleInc" job-repository="jobRepository">
+		<batch:step id="stepSimple" allow-start-if-complete="true">
+			<batch:tasklet ref="helloTasklet" />
+		</batch:step>
+	</batch:job>
+</beans>
