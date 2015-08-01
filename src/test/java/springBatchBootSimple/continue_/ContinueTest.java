@@ -63,7 +63,7 @@ public class ContinueTest {
 
     @Test
     public void shouldAwaitUnitDone() throws NoSuchJobException, JobInstanceAlreadyExistsException, JobParametersInvalidException {
-        long executionId = jobOperator.start("continueJob", "start=1");
+        long executionId = jobOperator.start("continueJob", "time" + new Date().getTime());
         Awaitility.await().until(finished(executionId));
 
     }
