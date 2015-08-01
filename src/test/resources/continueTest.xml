@@ -22,7 +22,7 @@
     </bean>
     
     <util:list id="processorList">
-      <value>16</value>
+      <!-- <value>16</value> -->
     </util:list>
     <bean id="processor" class="pl.java.scalatech.skip.SkipProcessor">
       <property name="invalidValues" ref="processorList"/>
@@ -51,8 +51,11 @@
             <batch:listener ref="stepContinueListener"/>
          </batch:listeners>
        </batch:tasklet>
-      
      </batch:step>
    </batch:job>
-   
+   <!--  jobOperator.start("continueJob", "start=1"); -->
+     <bean id="jobRegistryBeanPostProcessor"  class="org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor"
+          p:jobRegistry-ref="jobRegistry"/>
+
+
   </beans>

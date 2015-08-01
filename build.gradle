@@ -35,6 +35,8 @@ dependencies {
     testCompile('junit:junit:4.12')
     testCompile 'org.assertj:assertj-core:3.1.0'
     testCompile("org.springframework.boot:spring-boot-starter-test")
+    
+     compile ("com.jayway.awaitility:awaitility:1.6.3") 
 }
 
 task wrapper(type: Wrapper) {
