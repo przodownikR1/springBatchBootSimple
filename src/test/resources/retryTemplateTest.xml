@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:batch="http://www.springframework.org/schema/batch"
+     xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+    xsi:schemaLocation=
+        "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+    <import resource="classpath:batchConfig.xml"/>
+   
+    
+    <bean id="stepContinueListener" class="pl.java.scalatech.continue_.StepContinueListener"/>
+  
+    <bean id="retryTemplate" class="org.springframework.retry.support.RetryTemplate">
+        <property name="retryPolicy">
+            <bean id="retryPolicy" class="org.springframework.retry.policy.SimpleRetryPolicy">
+                <property name="maxAttempts" value="5" />
+            </bean>
+        </property>
+        <property name="backOffPolicy">
+            <bean id="backOffPolicy" class="org.springframework.retry.backoff.FixedBackOffPolicy">
+                <property name="backOffPeriod" value="1000" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="startTasklet" class="pl.java.scalatech.retryTemplate.RetryTasklet">
+      <property name="retryTemplate" ref="retryTemplate" />
+    </bean>    
+
+    
+   <batch:job id="retryTempJob" restartable="false">
+     <batch:step id="retryTempleStep">
+       <batch:tasklet  ref="startTasklet">
+       </batch:tasklet>
+     </batch:step>
+   </batch:job>
+  
+
+  </beans>
+
